@@ -1,4 +1,4 @@
-package com.example.foodicsassessment.ui.theme
+package com.degel.android_interview.core.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
