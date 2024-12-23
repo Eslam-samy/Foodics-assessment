@@ -3,18 +3,19 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp")
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlinx.serialization)
 
 
 }
 
 android {
     namespace = "com.example.foodicsassessment"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.foodicsassessment"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -25,12 +26,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://my.api.mockaroo.com\"")
+            buildConfigField("String", "KEY", "\"40023f60\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"https://my.api.mockaroo.com\"")
+            buildConfigField("String", "KEY", "\"40023f60\"")
+
         }
     }
     compileOptions {
@@ -81,6 +89,8 @@ dependencies {
 
     // for Ktor
     implementation(libs.bundles.ktor)
+    //for koin DI
+    implementation(libs.bundles.koin)
 
     // for navigation
     implementation(libs.navigation.compose)

@@ -11,6 +11,7 @@ activityCompose = "1.9.3"
 composeBom = "2024.12.01"
 ktor = "3.0.0"
 mockk = "1.13.13"
+koinAndroidVersion = "4.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +43,13 @@ dagger-hilt-testing = { module = "com.google.dagger:hilt-android-testing", versi
 dagger-kapt = { module = 'com.google.dagger:hilt-android-compiler', version = "2.50" }
 hilt-compose-navigation = { module = "androidx.hilt:hilt-navigation-compose", version = "1.2.0" }
 
+# Koin (Dependency Injection)
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroidVersion" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koinAndroidVersion" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidVersion" }
+koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koinAndroidVersion" }
+
+
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.8.5" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.7.3" }
@@ -67,4 +75,7 @@ ktor = [
     "ktor-client-core",
     "ktor-client-logging",
     "ktor-serialization-kotlinx-json"
+]
+koin = [
+    "koin-android", "koin-androidx-compose", "koin-androidx-navigation",
 ]
