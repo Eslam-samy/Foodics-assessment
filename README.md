@@ -103,12 +103,11 @@ This project is a simple Android application that allows users to browse categor
   - **Pull Requests (PRs)**: Minimum of 3 PRs merged into Dev.
 
 ## Deliverables
-- Fully functional Android project with MVVM architecture.
+- Fully functional Android project with MVI architecture.
 - Working API integration using Ktor.
 - Room database for local storage.
 - Responsive UI developed with Jetpack Compose and Material 3.
 - Clear and organized codebase following clean architecture principles.
 
-## Deadline
-- The project was completed within 7 days as required.
+
 
