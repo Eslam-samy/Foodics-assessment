@@ -96,7 +96,7 @@ This project is a simple Android application that allows users to browse categor
 4. Run the app on an emulator or physical device.
 
 ## GitHub Repository
-- Repository URL: [[[https://github.com/username/repo-name](https://github.com/Eslam-samy/Foodics-assessment)]
+- Repository URL: [[[https://github.com/Eslam-samy/Foodics-assessment](https://github.com/Eslam-samy/Foodics-assessment)]
 - Branching Strategy:
   - **Main Branch**: Production-ready code.
   - **Dev Branch**: Development branch with active feature development.
