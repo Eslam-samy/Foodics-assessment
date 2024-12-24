@@ -1,4 +1,5 @@
 package com.example.foodicsassessment.core.presentation.components
+
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,33 +17,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.foodicsassessment.core.presentation.ui.theme.body_text
+import com.example.foodicsassessment.core.presentation.ui.theme.colors
+import com.example.foodicsassessment.core.presentation.ui.theme.mid_text
+import com.example.foodicsassessment.core.presentation.ui.theme.small_text
+import com.example.foodicsassessment.core.presentation.ui.theme.text_button
 
 @Composable
 fun CommonTextField(
     modifier: Modifier = Modifier,
     value: String,
-    label: String,
-    isPassword: Boolean = false,
+    placeHolder: String,
     isError: Boolean = false,
     onValueChange: (String) -> Unit,
+    prefixIcon: ImageVector? = null
 ) {
-    // Focus state
     var isFocused by remember { mutableStateOf(false) }
-
-    // FocusRequester to manage focus
     val focusRequester = FocusRequester()
 
-    // Animations for border and background colors
     val borderColor by animateColorAsState(
         targetValue = when {
-            isFocused -> MaterialTheme.colorScheme.primary // Primary color when focused
-            isError -> MaterialTheme.colorScheme.error // com.example.foodicsassessment.core.domain.util.Error color when error
-            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f) // Default border color (gray)
+            isFocused -> MaterialTheme.colorScheme.primary
+            isError -> MaterialTheme.colorScheme.error
+            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
         }
     )
 
@@ -50,65 +56,65 @@ fun CommonTextField(
         targetValue = if (isError) MaterialTheme.colorScheme.error.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surface,
     )
 
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(
-                label,
-                color = if (isFocused || value.isNotEmpty()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = 0.6f
-                )
-            )
-        },
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = when {
-                isPassword -> KeyboardType.Password
-                else -> KeyboardType.Text
-            }
-        ),
-        colors = TextFieldDefaults.colors().copy(
-            focusedIndicatorColor = Color.Transparent, // No focused indicator
-            unfocusedIndicatorColor = Color.Transparent, // No unfocused indicator
-        ),
-        singleLine = true,
-        textStyle = TextStyle(
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onSurface // Text color based on surface
-        ),
-        shape = RoundedCornerShape(8.dp), // Rounded corners
-        isError = isError, // Pass the error state
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .background(
-                backgroundColor,
-                shape = RoundedCornerShape(8.dp)
-            ) // Background color with rounded corners
-            .border(
-                2.dp,
-                borderColor,
-                RoundedCornerShape(8.dp)
-            ) // Border color with rounded corners
-            .onFocusChanged { focusState ->
-                isFocused = focusState.isFocused // Update focus state
+            .height(40.dp)
+            .background(backgroundColor, shape = RoundedCornerShape(8.dp))
+            .border(1.dp, borderColor.copy(alpha = .3f), RoundedCornerShape(8.dp))
+            .onFocusChanged { isFocused = it.isFocused }
+            .focusRequester(focusRequester)
+            .padding(horizontal = 8.dp)  // Custom padding around the whole text field
+    ) {
+        Row(
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colors.backgroundColor)
+        ) {
+            if (prefixIcon != null) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = prefixIcon,
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.width(8.dp))
             }
-            .focusRequester(focusRequester) // Focus management
-    )
+
+            BasicTextField(
+                value = value,
+                onValueChange = onValueChange,
+                textStyle = MaterialTheme.typography.small_text.copy(
+                    color = MaterialTheme.colors.textColor
+                ),
+                singleLine = true,
+                modifier = Modifier.weight(1f),
+                decorationBox = { innerTextField ->
+                    if (value.isEmpty()) {
+                        Text(
+                            text = placeHolder,
+                            style = MaterialTheme.typography.mid_text.copy(
+                                color = MaterialTheme.colors.textColor.copy(alpha = .3f)
+                            )
+                        )
+                    }
+                    innerTextField()
+                }
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CommonTextFieldPreview() {
-    var value by remember { mutableStateOf("password123") }
+    var value by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
     CommonTextField(
         value = value,
         onValueChange = { value = it },
-        label = "Password",
-        isPassword = true,
-        isError = isError
+        isError = isError,
+        placeHolder = "Search",
+        prefixIcon = Icons.Default.Search
     )
 }

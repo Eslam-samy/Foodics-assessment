@@ -27,7 +27,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://my.api.mockaroo.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://my.api.mockaroo.com/\"")
             buildConfigField("String", "KEY", "\"40023f60\"")
         }
         release {
@@ -36,7 +36,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://my.api.mockaroo.com\"")
+            buildConfigField("String", "BASE_URL", "\"https://my.api.mockaroo.com/\"")
             buildConfigField("String", "KEY", "\"40023f60\"")
 
         }
@@ -95,6 +95,14 @@ dependencies {
     // for navigation
     implementation(libs.navigation.compose)
 
+    implementation (libs.androidx.material.icons.extended)
+
+
+    //for paging
+    implementation(libs.androidx.paging.compose)
+
+    //coil for showing images
+    implementation(libs.coil.compose)
 
     // for testing
     testImplementation (libs.mockk)
