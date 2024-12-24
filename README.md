@@ -89,7 +89,7 @@ This project is a simple Android application that allows users to browse categor
 ## How to Run the Project
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/repo-name.git
+   git clone https://github.com/Eslam-samy/Foodics-assessment
    ```
 2. Open the project in Android Studio.
 3. Sync Gradle and build the project.
