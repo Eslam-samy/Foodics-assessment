@@ -7,4 +7,16 @@
     <string name="error_server_error">Server error</string>
     <string name="error_serialization">Serialization error</string>
     <string name="error_unknown">Unknown error</string>
+    <string name="settings">Settings</string>
+    <string name="menu">Menu</string>
+    <string name="orders">Orders</string>
+    <string name="tables">Tables</string>
+
+    <string name="no_internet">No Internet</string>
+    <string name="not_found">Not Found</string>
+    <string name="server_error">Server Not Available Now</string>
+    <string name="unknown_error">Unknown Error</string>
+    <string name="search_by_voice">Search by voice</string>
+    <string name="search_place_holder">Search for products or categories</string>
+    <string name="view_order">View order</string>
 </resources>
