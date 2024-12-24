@@ -1,7 +1,7 @@
 # Simple E-Commerce Android Application
 
 ## Overview
-This project is a simple Android application that allows users to browse categories, view products, and add products directly to their order. The app integrates mock APIs for fetching data and stores it locally using Room. The application follows the MVVM architecture and utilizes Jetpack Compose with Material 3 for UI design.
+This project is a simple Android application that allows users to browse categories, view products, and add products directly to their order. The app integrates mock APIs for fetching data and stores it locally using Room. The application follows the MVI architecture and utilizes Jetpack Compose with Material 3 for UI design.
 
 ## Features
 ### 1. Product Search
