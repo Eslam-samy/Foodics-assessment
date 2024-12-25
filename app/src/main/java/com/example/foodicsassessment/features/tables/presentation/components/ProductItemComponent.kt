@@ -82,7 +82,10 @@ fun ProductItemComponent(
                         )
                         .padding(10.dp),
                 ) {
-                    Text(text = product.name.orEmpty())
+                    Column {
+                        Text(text = product.name.orEmpty())
+                        Text(text = "${product.price.toString()} SAR")
+                    }
                 }
             }
         }
