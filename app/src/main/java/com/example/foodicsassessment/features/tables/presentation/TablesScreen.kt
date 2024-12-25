@@ -1,6 +1,8 @@
 package com.example.foodicsassessment.features.tables.presentation
 
 import android.util.Log
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +25,9 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -81,101 +85,113 @@ fun TablesScreen(
     uiState: TablesUiState,
     onEvent: (TablesUiEvents) -> Unit,
     handleCommonEvents: (CommonUiEffect) -> Unit,
-
-    ) {
-    val pagerState = rememberPagerState(initialPage = 0,
+) {
+    val pagerState = rememberPagerState(
+        initialPage = 0,
         initialPageOffsetFraction = 0f,
-        pageCount = { uiState.categories.size })
+        pageCount = { uiState.categories.size }
+    )
     val coroutineScope = rememberCoroutineScope()
+
+    // Synchronize tab selection with pager state
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        onEvent(TablesUiEvents.OnCategorySelected(pagerState.currentPage))
+    }
+
     val validIndex = uiState.selectedTabIndex.takeIf { it in uiState.categories.indices } ?: 0
+
     if (uiState.loading) {
         MainAppLoader(modifier = Modifier.background(Color.White))
     } else {
         Column(
             modifier = modifier
-                .background(
-                    color = MaterialTheme.colors.backgroundColor
-                )
+                .background(MaterialTheme.colors.backgroundColor)
                 .fillMaxSize()
                 .padding(horizontal = MaterialTheme.spacing.small)
         ) {
             UserDetailsBar(
-                userName = uiState.userName, userId = uiState.userId
+                userName = uiState.userName,
+                userId = uiState.userId
             )
-            Spacer(
-                modifier = Modifier.height(10.dp)
+            Spacer(modifier = Modifier.height(10.dp))
+            TablesAppBar(
+                tablesNumber = uiState.tablesCount,
+                usersNumber = uiState.peopleCount
             )
-            TablesAppBar(tablesNumber = uiState.tablesCount, usersNumber = uiState.peopleCount)
-            Spacer(
-                modifier = Modifier.height(10.dp)
-            )
+            Spacer(modifier = Modifier.height(10.dp))
             CommonTextField(
                 value = uiState.searchKey,
                 placeHolder = stringResource(id = R.string.search_place_holder),
-                onValueChange = {
-                    onEvent(TablesUiEvents.OnSearchKeyChanged(it))
-                },
+                onValueChange = { onEvent(TablesUiEvents.OnSearchKeyChanged(it)) },
                 prefixIcon = Icons.Default.Search
             )
-            Spacer(
-                modifier = Modifier.height(10.dp)
-            )
-            ScrollableTabRow(divider = {},
+            Spacer(modifier = Modifier.height(10.dp))
+            ScrollableTabRow(
+                divider = {},
                 edgePadding = 0.dp,
                 containerColor = Color.Unspecified,
                 selectedTabIndex = validIndex,
                 indicator = { tabPositions ->
                     Row(
                         modifier = Modifier.tabIndicatorOffset(tabPositions[validIndex]),
-                        horizontalArrangement = Arrangement.Center,
+                        horizontalArrangement = Arrangement.Center
                     ) {
                         Box(
                             modifier = Modifier
                                 .height(3.dp)
                                 .fillMaxWidth()
                                 .background(
-                                    color = MaterialTheme.colorScheme.primary, shape = CircleShape
+                                    color = MaterialTheme.colorScheme.primary,
+                                    shape = CircleShape
                                 )
                         )
                     }
-                }) {
+                }
+            ) {
                 uiState.categories.forEachIndexed { index, title ->
-                    Tab(selected = index == validIndex, onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                            onEvent(TablesUiEvents.OnCategorySelected(index))
-                        }
-                    }, text = {
-                        Text(
-                            title.name.orEmpty(),
-                            style = MaterialTheme.typography.small_text.copy(
-                                color = MaterialTheme.colors.textColor,
-                                fontWeight = if (index == uiState.selectedTabIndex) {
-                                    FontWeight.SemiBold
-                                } else {
-                                    FontWeight.Normal
+                    Tab(
+                        selected = index == validIndex,
+                        onClick = {
+                            coroutineScope.launch {
+                                if (pagerState.currentPage != index) {
+                                    pagerState.animateScrollToPage(
+                                        index,
+                                        animationSpec = tween(300, easing = FastOutSlowInEasing)
+                                    )
                                 }
-
+                                onEvent(TablesUiEvents.OnCategorySelected(index))
+                            }
+                        },
+                        text = {
+                            Text(
+                                title.name.orEmpty(),
+                                style = MaterialTheme.typography.small_text.copy(
+                                    color = MaterialTheme.colors.textColor,
+                                    fontWeight = if (index == uiState.selectedTabIndex) {
+                                        FontWeight.SemiBold
+                                    } else {
+                                        FontWeight.Normal
+                                    }
+                                )
                             )
-                        )
-                    })
+                        }
+                    )
                 }
             }
 
-            // HorizontalPager to switch between pages
             HorizontalPager(
-                state = pagerState, modifier = Modifier
+                state = pagerState,
+                modifier = Modifier
                     .fillMaxSize()
                     .weight(1f)
             ) { page ->
-                // Content for each page (replace with your content composable)
                 ProductListComponent(
                     categoryId = uiState.categories[page].id ?: -1,
                     searchKey = uiState.searchKey,
                     handleCommonEvents = handleCommonEvents,
                     onProductClicked = {
                         onEvent(TablesUiEvents.AddToCart(it))
-                    },
+                    }
                 )
             }
 
@@ -193,6 +209,7 @@ fun TablesScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
