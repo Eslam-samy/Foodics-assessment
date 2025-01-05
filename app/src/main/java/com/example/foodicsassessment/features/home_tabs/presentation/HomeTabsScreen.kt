@@ -36,12 +36,15 @@ fun HomeTabsScreenRoot(
                     handleCommonEvents = handleCommonEvents
                 )
             }
+            //orders route
             composable<OrdersRoute> {
                 OrderScreenRoot()
             }
+            //menu route
             composable<MenuRoute> {
                 MenuScreenRoot()
             }
+            //settings route
             composable<SettingsRoute> {
                 SettingsScreenRoot()
             }
